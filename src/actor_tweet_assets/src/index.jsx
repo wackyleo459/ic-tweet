@@ -55,7 +55,7 @@ const MyHello = () => {
       <div style={{ margin: "30px" }}>
         <input
           onChange={(ev) => setPost( {...post, ...{
-              date: Date.now(),
+              date: new Date().toString().slice(0, 21),
               author: name,
               message: ev.target.value,
             }
