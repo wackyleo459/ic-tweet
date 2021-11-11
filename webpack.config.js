@@ -112,7 +112,7 @@ module.exports = {
       },
     },
     hot: true,
-    contentBase: path.resolve(__dirname, "./src/actor_tweet_assets"),
-    watchContentBase: true
+    watchFiles: path.resolve(__dirname, "./src/actor_tweet_assets"),
+    liveReload: true
   },
 };
