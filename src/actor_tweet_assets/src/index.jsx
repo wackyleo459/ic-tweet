@@ -29,9 +29,10 @@ const MyHello = () => {
     setName(e.target.value);
     setPost({...post, author: e.target.value})
   }
+  //useEffect for tweets
 
   return (
-    <div>
+    <React.Fragment>
       <img src="logo.png" alt="DFINITY logo" />
       <section>
           <label for="name">Enter your Name: &nbsp;</label>
@@ -41,41 +42,40 @@ const MyHello = () => {
             type="text"
             onChange={ev => nameChange(ev)}
           ></input>
-          <button id="clickMeBtn" onClick={greet}>Log In</button>
+          <button id="clickLogin" onClick={greet}>Log In</button>
       </section>
       <section id="greeting"></section>
       {/* dynamically render {} */}
-      <div>
-        <p>Greetings, from DFINITY!</p>
-        <p>{" "}
-          Type your post in the  input field, then click{" "}
-          <b> Post Tweet </b> to display the result.
-        </p>
+
+      <div id="postWindow">
+        Write your tweet here...
+        <div id="postMessage">
+          <textarea
+            onChange={(ev) => setPost( {...post, ...{
+                date: new Date().toString().slice(0, 21),
+                author: name,
+                message: ev.target.value,
+              }
+            })}
+          ></textarea>
+          <button onClick={getTweets} style={{display: 'block'}}>Post Tweet!</button>
+        </div>
       </div>
-      <div style={{ margin: "30px" }}>
-        <input
-          onChange={(ev) => setPost( {...post, ...{
-              date: new Date().toString().slice(0, 21),
-              author: name,
-              message: ev.target.value,
-            }
-          })}
-        ></input>
-        <button onClick={getTweets}>Get Greeting!</button>
-      </div>
-      <div>
+
+      <div id="tweets">
         {tweets.map((tweet, ind) => (
-            <div key={ind}>
-              <li>
-                {tweet.message}
-              </li>
-              <span>{tweet.author}</span>
-              <span>{tweet.date}</span>
+            <div className="tweet" key={ind}>
+              <div className="tweetHeader">
+                <span className="author">{tweet.author}</span>
+                <em className="timestamp">{tweet.date}</em>
+              </div>
+              <div className="tweetMessage">{tweet.message}
+              </div>
             </div>
           ))
         }
       </div>
-    </div>
+    </React.Fragment>
   );
 };
 
