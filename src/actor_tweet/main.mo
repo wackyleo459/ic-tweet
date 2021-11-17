@@ -7,7 +7,7 @@ import Array "mo:base/Array";
 import Debug "mo:base/Debug";
 
 
-actor Tweet {
+actor {
     public type Post = {
         date: Text;
         author: Text;
@@ -15,13 +15,14 @@ actor Tweet {
     };
 
     let post1 : Post = {
-        date = "Nov15";
-        author = "sue";
-        message = "hi";
+        date = "";
+        author = "";
+        message = "";
     };
 
     stable var posts : [var Post] = Array.init<Post>(10, post1);
 
+    stable var postCount : Nat = 0;
 
     type User = {
         userId: ?Text;
@@ -31,18 +32,34 @@ actor Tweet {
     };
 
     public func getAll(): async [Post] {
-        Array.freeze(posts);
+       return Array.freeze(posts);
     };
-
-    public shared(install) func addPost (message: Text): async [Post]{
+    public query func getCount(): async Nat {
+        return postCount;
+    };
+    public shared(install) func addPost (inputMessage: Text, inputDate: Text, inputAuthor: Text): async [Post] {
         var newPost: Post = {
-            date = "Nov16";
-            author = "Sue";
-            message = message;
+            date = inputDate;
+            author = inputAuthor;
+            message = inputMessage;
         };
-        posts := Array.append<Post>(posts, [newPost]);
-        await getAll();
 
+        if (postCount <= 10) {
+            posts[postCount] := newPost;
+        } else {
+            var nPosts : [var Post] = Array.init<Post>(30, post1);
+            Array.mapEntries<Post, Post>(Array.freeze(nPosts), func (post : Post, ind : Nat) : Post {
+                if (ind <= postCount) {
+                    return posts[ind];
+                };
+                nPosts[ind];
+            });
+            posts := nPosts;
+        };
+
+        postCount += 1;
+        // Array.append<Post>(posts, [newPost]);
+        return Array.freeze(posts);// return nArr;
     };
 
 };

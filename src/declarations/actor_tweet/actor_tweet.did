@@ -1,18 +1,11 @@
-type User = 
- record {
-   email: opt text;
-   id: principal;
-   name: opt text;
-   userId: opt text;
- };
-type Time = int;
 type Post = 
  record {
-   author: User;
-   date: Time;
-   message: opt text;
+   author: text;
+   date: text;
+   message: text;
  };
 service : {
-  addPost: (Post) -> (text);
-  getAll: () -> (vec nat);
+  addPost: (text, text, text) -> (vec Post);
+  getAll: () -> (vec Post);
+  getCount: () -> (nat) query;
 }

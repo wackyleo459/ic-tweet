@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { render } from "react-dom";
 import { actor_tweet } from "../../declarations/actor_tweet";
 
@@ -18,19 +18,30 @@ const MyHello = () => {
   const [tweets, addTweet] = useState([])
 
   function greet() {
-    actor_tweet.getAll('SueAnn').then(message => console.log(message));
+    actor_tweet.getAll().then(message => console.log(message));
     setLogin(true);
     document.getElementById("greeting").innerText = `Hello ${name}, you are logged in`;
   }
   function getTweets() {
-    addTweet(og => [post, ...og]);
+    actor_tweet.addPost(post.message, post.date, post.author);
+    addTweet(orig => [post, ...orig]);
 
   }
   function nameChange(e) {
     setName(e.target.value);
     setPost({...post, author: e.target.value})
   }
-  //useEffect for tweets
+  useEffect(() => {
+    actor_tweet.getAll().then(result => {
+
+      actor_tweet.getCount().then(count => {
+        let posts = result.slice(0, Number(count));
+        posts.forEach(entry => {
+          addTweet(orig => [entry, ...orig]);
+        })
+      });
+    });
+  }, [])//useEffect for tweets
 
   return (
     <React.Fragment>
