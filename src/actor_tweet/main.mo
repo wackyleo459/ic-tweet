@@ -44,11 +44,11 @@ actor {
             message = inputMessage;
         };
 
-        if (postCount <= 10) {
+        if (postCount < 10) {
             posts[postCount] := newPost;
         } else {
             var nPosts : [var Post] = Array.init<Post>(30, post1);
-            Array.mapEntries<Post, Post>(Array.freeze(nPosts), func (post : Post, ind : Nat) : Post {
+            return Array.mapEntries<Post, Post>(Array.freeze(nPosts), func (post : Post, ind : Nat) : Post {
                 if (ind <= postCount) {
                     return posts[ind];
                 };
