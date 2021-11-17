@@ -18,11 +18,12 @@ const MyHello = () => {
   const [tweets, addTweet] = useState([])
 
   function greet() {
+    actor_tweet.getAll('SueAnn').then(message => console.log(message));
     setLogin(true);
     document.getElementById("greeting").innerText = `Hello ${name}, you are logged in`;
   }
   function getTweets() {
-    addTweet(og => [...og, post]);
+    addTweet(og => [post, ...og]);
 
   }
   function nameChange(e) {

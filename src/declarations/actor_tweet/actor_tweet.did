@@ -1,3 +1,18 @@
+type User = 
+ record {
+   email: opt text;
+   id: principal;
+   name: opt text;
+   userId: opt text;
+ };
+type Time = int;
+type Post = 
+ record {
+   author: User;
+   date: Time;
+   message: opt text;
+ };
 service : {
-  greet: (text) -> (text);
+  addPost: (Post) -> (text);
+  getAll: () -> (vec nat);
 }
