@@ -34,11 +34,13 @@ actor {
     public func getAll(): async [Post] {
        return Array.freeze(posts);
     };
+
     public query func getCount(): async Nat {
         return postCount;
     };
+
     public shared(install) func addPost (inputMessage: Text, inputDate: Text, inputAuthor: Text): async [Post] {
-        var newPost: Post = {
+        let newPost: Post = {
             date = inputDate;
             author = inputAuthor;
             message = inputMessage;
@@ -47,19 +49,22 @@ actor {
         if (postCount < 10) {
             posts[postCount] := newPost;
         } else {
-            var nPosts : [var Post] = Array.init<Post>(30, post1);
-            return Array.mapEntries<Post, Post>(Array.freeze(nPosts), func (post : Post, ind : Nat) : Post {
-                if (ind <= postCount) {
+            let nPosts : [var Post] = Array.init<Post>(30, post1);
+            nPosts[postCount] := newPost;
+
+            let response : [Post] = Array.mapEntries(Array.freeze(nPosts), func (post : Post, ind : Nat) : Post {
+                if (ind < postCount) {
                     return posts[ind];
-                };
-                nPosts[ind];
+                } else {
+                    return nPosts[ind];
+                }
             });
-            posts := nPosts;
+            posts := Array.thaw(response);
         };
 
         postCount += 1;
-        // Array.append<Post>(posts, [newPost]);
-        return Array.freeze(posts);// return nArr;
+
+        return Array.freeze(posts);
     };
 
 };

@@ -23,7 +23,7 @@ const MyHello = () => {
     document.getElementById("greeting").innerText = `Hello ${name}, you are logged in`;
   }
   function getTweets() {
-    actor_tweet.addPost(post.message, post.date, post.author);
+    actor_tweet.addPost(post.message, post.date, post.author).then(newArr => console.log(newArr));
     addTweet(orig => [post, ...orig]);
 
   }
